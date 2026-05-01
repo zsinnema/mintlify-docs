@@ -1,0 +1,60 @@
+openapi: 3.0.4
+info:
+  title: example
+  termsOfService: https://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.12
+paths:
+  /shipment:
+    get:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: "#/components/schemas/CorreosCarrier"
+                - $ref: "#/components/schemas/PostNLCarrier"
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/CorreosCarrier"
+                  - $ref: "#/components/schemas/PostNLCarrier"
+components:
+  schemas:
+    CarrierCommon:
+      type: object
+      properties:
+        delivery_mnessage:
+          type: string
+    Carrier:
+      allOf:
+        - $ref: "#/components/schemas/CarrierCommon"
+        - type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+    CorreosCarrier:
+      allOf:
+        - $ref: "#/components/schemas/Carrier"
+        - type: object
+          properties:
+            some_common_carrier_field:
+              type: string
+    PostNLCarrier:
+      allOf:
+        - $ref: "#/components/schemas/Carrier"
+        - type: object
+          properties:
+            postnl_carrier_field:
+              type: string
